@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Champion Round – Junior Category</title>
+<meta name="description" content="Champion Round – Junior Category – spelling bee word list with recorded British English pronunciation. Works offline.">
+<style>
+:root{
+  --paper:#F6F3FA; --surface:#FFFFFF; --sunk:#EEE9F5; --ink:#221A2E; --muted:#675D75; --line:#E1D9EC;
+  --purple:#633F91; --purple-ink:#FFFFFF; --lavender:#D9CFE8; --lav-ink:#3E2765;
+  --honey:#E4A11B; --honey-ink:#2E2104; --honey-soft:#FBEFD2;
+  --err:#B42318; --err-soft:#FDECEA; --flag:#8A5A00; --voice:#1F6F78; --voice-soft:#E1F2F3;
+  --shadow:0 1px 2px rgba(40,20,70,.06),0 8px 28px rgba(40,20,70,.08);
+  --f-display:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --f-body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14101B; --surface:#1F1929; --sunk:#191422; --ink:#EEE8F6; --muted:#A99DBA; --line:#342B43;
+    --purple:#B596E3; --purple-ink:#1A1026; --lavender:#342853; --lav-ink:#DCCDF5;
+    --honey:#F0B43A; --honey-ink:#231800; --honey-soft:#3A2C0E;
+    --err:#F58A7F; --err-soft:#3B1D1D; --flag:#F0C060; --voice:#6CC7CF; --voice-soft:#12302F;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding:0 16px 48px}
+.wrap{max-width:1160px;margin:0 auto}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--honey);outline-offset:2px;border-radius:6px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding:28px 0 18px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:1.08;margin:.2rem 0 0;text-wrap:balance}
+h1 .comb{display:inline-block;width:.62em;height:.7em;margin-left:.25em;background:var(--honey);clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%);vertical-align:.02em}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 14px;font-weight:700;font-size:.9rem}
+.seg button[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:var(--purple-ink)}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .08s ease,filter .15s}
+.btn:active{transform:translateY(1px)}
+.btn:hover{filter:brightness(1.06)}
+.btn-honey{background:var(--honey);color:var(--honey-ink)}
+.btn-purple{background:var(--purple);color:var(--purple-ink)}
+.btn-ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+.btn.playing{box-shadow:0 0 0 3px var(--honey)}
+.kbd{font-size:.7rem;border:1px solid currentColor;border-radius:5px;padding:0 5px;opacity:.65;font-weight:400}
+svg.i{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.draw{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;margin-top:24px;align-items:start}
+.panel-top{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.left-count{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.95rem}
+.left-count b{color:var(--ink)}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:clamp(20px,4vw,40px);min-height:430px;display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:3px 12px;font-size:.85rem;font-weight:700;background:var(--lavender);color:var(--lav-ink)}
+.chip.pos{background:var(--honey-soft);color:var(--flag);vertical-align:.12em;margin-right:6px}
+.idle{flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:18px}
+.idle h2{font-family:var(--f-display);font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.1;margin:0;text-wrap:balance;max-width:20ch}
+.idle p{margin:0;color:var(--muted);max-width:54ch}
+.btn-draw{font-size:1.2rem;padding:16px 26px;border-radius:14px}
+.spin{font-family:var(--f-display);font-weight:800;font-size:clamp(1.4rem,4vw,2.4rem);color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.say{display:flex;flex-wrap:wrap;gap:10px}
+.btn-say{font-size:1.15rem;padding:16px 24px}
+.spell{border-radius:16px;background:var(--sunk);border:1px dashed var(--line);padding:18px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;min-height:112px}
+.spell.shown{border-style:solid;background:transparent}
+.hiddenmsg{color:var(--muted);display:flex;align-items:center;gap:10px;font-weight:700}
+.bigword{font-family:var(--f-display);font-weight:800;font-size:clamp(2.2rem,6.4vw,4.4rem);line-height:1;overflow-wrap:anywhere;margin:0}
+.variants{color:var(--muted);font-size:.95rem;margin-top:6px}
+.defn{font-size:clamp(1.1rem,2vw,1.35rem);line-height:1.45;max-width:60ch;margin:0}
+.label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+.stage-foot{margin-top:auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;border-top:1px solid var(--line);padding-top:18px}
+.notice{border-radius:12px;padding:10px 14px;font-size:.92rem}
+.notice.err{background:var(--err-soft);color:var(--err)}
+.notice.voice{background:var(--voice-soft);color:var(--voice)}
+.hint{font-size:.82rem;color:var(--muted)}
+aside.side{display:flex;flex-direction:column;gap:16px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.box h3{font-family:var(--f-display);font-size:1.02rem;margin:0 0 10px}
+.toggle{display:flex;gap:10px;align-items:flex-start;font-size:.95rem;margin-top:8px}
+.toggle input{width:20px;height:20px;accent-color:var(--purple);margin-top:2px;flex:none}
+label.field{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);font-weight:700;margin-top:12px}
+select{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--purple)}
+footer{margin-top:28px;color:var(--muted);font-size:.8rem}
+@media (max-width:880px){.draw{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">AG Spelling Bee Contest</div>
+      <h1>Champion Round – Junior Category<span class="comb" aria-hidden="true"></span></h1>
+    </div>
+  </header>
+
+  <section id="view-draw" class="draw">
+    <div>
+      <div class="panel-top">
+        <div class="left-count" id="leftCount"></div>
+      </div>
+      <div class="stage" id="stage" aria-live="polite"></div>
+    </div>
+    <aside class="side">
+      <div class="box">
+        <h3>Contest settings</h3>
+        <label class="toggle"><input type="checkbox" id="hideSpell" checked> <span>Hide the spelling until I click <b>Reveal spelling</b> (use this when the screen is shown to students)</span></label>
+        <label class="toggle"><input type="checkbox" id="hideDef"> <span>Hide the part of speech and definition too</span></label>
+      </div>
+      <div class="box">
+        <h3>Voice</h3>
+        <div class="seg" id="voiceMode" role="group" aria-label="Voice type">
+          <button type="button" data-m="rec">Recorded (offline)</button>
+          <button type="button" data-m="tts">Microsoft Sonia (online)</button>
+        </div>
+        <p class="hint" id="recHint" style="margin:10px 0 0">A British English neural voice recorded for every word. Works with no internet.</p>
+        <div id="ttsBox" hidden>
+          <label class="field" for="voiceSel">Online British voice
+            <select id="voiceSel"></select>
+          </label>
+          <label class="field" for="rate">Speed <span id="rateVal"></span>
+            <input type="range" id="rate" min="0.5" max="1.2" step="0.05" value="0.85">
+          </label>
+          <p class="hint" style="margin:8px 0 0">Uses <b>Microsoft Sonia Online (Natural)</b>, a British English voice built into Microsoft Edge. It needs internet. If the page is offline, use Recorded.</p>
+          <p class="notice err" id="noSonia" hidden style="margin:8px 0 0">Microsoft Sonia was not found in this browser. Open this page in <b>Microsoft Edge</b> to use it. Until then, another British voice is used.</p>
+        </div>
+        <button class="btn btn-ghost" id="testVoice" type="button" style="width:100%;margin-top:12px">Test voice</button>
+        <p id="voiceErr" class="notice err" hidden style="margin:10px 0 0"></p>
+      </div>
+      <div class="box">
+        <h3>New contest</h3>
+        <p class="hint" style="margin:0 0 10px">Makes all words available to draw again. Use this only before a new contest.</p>
+        <button class="btn btn-ghost" id="freshBtn" type="button" style="width:100%">Start fresh for a new contest</button>
+        <div id="freshConfirm" hidden style="margin-top:10px">
+          <p style="margin:0 0 8px;font-weight:700">All drawn words will be available again. Continue?</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-honey" id="freshYes" type="button">Yes, start fresh</button>
+            <button class="btn btn-ghost" id="freshNo" type="button">Cancel</button>
+          </div>
+        </div>
+        <p class="hint" id="freshDone" hidden style="margin:10px 0 0">Started fresh. All words can be drawn again.</p>
+      </div>
+      <p class="hint">Keyboard: <span class="kbd">D</span> draw · <span class="kbd">P</span> pronounce · <span class="kbd">S</span> slowly · <span class="kbd">R</span> reveal</p>
+    </aside>
+  </section>
+  <footer>Definitions: Oxford Learner’s Dictionaries and Merriam-Webster. Recorded pronunciations: Kokoro neural text-to-speech (British English voice).</footer>
+</div>
+
+<script>
+const WORDS = [{"w":"Igneous","p":"adj","d":"(of rocks) formed when magma (= melted or liquid material lying below the earth's surface) becomes solid, especially after it has poured out of a volcano","v":[],"b":"Science Y6","a":"igneous","f":"part-1"},{"w":"Periscope","p":"n","d":"a device consisting of a long tube containing mirrors that enable the user to see over the top of something, used especially in a submarine (= a ship that can operate underwater) to see above the surface of the sea","v":[],"b":"Science Y6","a":"periscope","f":"part-1"},{"w":"Rehabilitation","p":"n","d":"the process of helping somebody to return to a normal, healthy life after they have been in prison or very ill","v":[],"b":"Science Y6","a":"rehabilitation","f":"part-1"},{"w":"Upthrust","p":"n","d":"(physics) the force with which a liquid or gas pushes up against an object that is floating in it","v":[],"b":"Science Y6","a":"upthrust","f":"part-1"},{"w":"Metamorphic","p":"adj","d":"(of rocks) formed by the action of heat or pressure","v":[],"b":"Science Y6","a":"metamorphic","f":"part-1"},{"w":"Oviduct","p":"n","d":"either of the tubes that carry eggs from the ovaries in women and female animals","v":[],"b":"Science Y6","a":"oviduct","f":"part-1"},{"w":"Solvent","p":"n","d":"a substance, especially a liquid, that can dissolve (= remove or destroy by a chemical process) another substance","v":[],"b":"Science Y6","a":"solvent","f":"part-1"},{"w":"Capillary","p":"n","d":"any of the smallest tubes in the body that carry blood","v":[],"b":"Science Y6","a":"capillary","f":"part-1"},{"w":"Pathogen","p":"n","d":"a thing that causes disease","v":[],"b":"Science Y6","a":"pathogen","f":"part-1"},{"w":"Uterus","p":"n","d":"the organ in women and female animals in which babies or young animals develop before they are born","v":[],"b":"Science Y6","a":"uterus","f":"part-1"},{"w":"Crystalline","p":"adj","d":"(specialist) made of or similar to crystals","v":[],"b":"Science Y6","a":"crystalline","f":"part-1"},{"w":"Biodegradable","p":"adj","d":"a substance or chemical that is biodegradable can be changed by the action of bacteria to a natural state that will not harm the environment","v":[],"b":"Science Y6","a":"biodegradable","f":"part-1"},{"w":"Herbivore","p":"n","d":"any animal that eats only plants","v":[],"b":"Science Y6","a":"herbivore","f":"part-1"},{"w":"Carnivore","p":"n","d":"any animal that eats meat","v":[],"b":"Science Y6","a":"carnivore","f":"part-1"},{"w":"Gibbous","p":"adj","d":"(of the moon) with the bright part bigger than a semicircle and smaller than a circle","v":[],"b":"Science Y6","a":"gibbous","f":"part-1"},{"w":"Ammeter","p":"n","d":"an instrument for measuring the strength of an electric current","v":[],"b":"Science Y6","a":"ammeter","f":"part-1"},{"w":"Electrophoresis","p":"n","d":"the movement of suspended particles through a medium (such as paper or gel) under the action of an electromotive force applied to electrodes in contact with the suspension","v":[],"b":"Science Y6","a":"electrophoresis","f":"part-1"},{"w":"Refraction","p":"n","d":"the fact of light, radio waves, etc. changing direction when they go through water, air, glass, etc. at an angle","v":[],"b":"Science Y6","a":"refraction","f":"part-1"},{"w":"Diaphragm","p":"n","d":"(anatomy) the layer of muscle between the lungs and the stomach, used especially to control breathing","v":[],"b":"Science Y6","a":"diaphragm","f":"part-1"},{"w":"Fossilisation","p":"n","d":"the process of becoming a fossil or of making something into a fossil","v":["Fossilization"],"b":"Science Y6","a":"fossilisation","f":"part-1"},{"w":"Diverge","p":"v","d":"to separate and go in different directions","v":[],"b":"Science Y6","a":"diverge","f":"part-1"},{"w":"Reactant","p":"n","d":"a substance that takes part in and is changed by a chemical reaction","v":[],"b":"Science Y6","a":"reactant","f":"part-1"},{"w":"Photosynthesis","p":"n","d":"the process by which green plants turn carbon dioxide and water into food using energy obtained from light from the sun","v":[],"b":"Science Y6","a":"photosynthesis","f":"part-1"},{"w":"Chlorophyll","p":"n","d":"the green substance in plants that takes in light from the sun to help them grow","v":[],"b":"Science Y6","a":"chlorophyll","f":"part-1"},{"w":"Translucent","p":"adj","d":"allowing light to pass through but not completely clear","v":[],"b":"Science Y6","a":"translucent","f":"part-1"},{"w":"Cytoplasm","p":"n","d":"all the living material in a cell, not including the nucleus","v":[],"b":"Science Y6","a":"cytoplasm","f":"part-1"},{"w":"Gneiss","p":"n","d":"a type of metamorphic rock formed at high pressure and temperature deep in the ground","v":[],"b":"Science Y6","a":"gneiss","f":"part-1"},{"w":"Quartzite","p":"n","d":"a compact granular rock composed of quartz and derived from sandstone by metamorphism","v":[],"b":"Science Y6","a":"quartzite","f":"part-1"},{"w":"Polystyrene","p":"n","d":"a very light soft plastic that is usually white, used especially for making containers that prevent heat loss","v":[],"b":"Science Y6","a":"polystyrene","f":"part-1"},{"w":"Lithium","p":"n","d":"a chemical element. Lithium is a soft, very light, silver-white metal used in batteries and alloys.","v":[],"b":"Science Y6","a":"lithium","f":"part-1"},{"w":"Cadmium","p":"n","d":"a chemical element. Cadmium is a soft poisonous blue-white metal that is used in batteries and nuclear reactors.","v":[],"b":"Science Y6","a":"cadmium","f":"part-1"},{"w":"Oesophagus","p":"n","d":"the tube through which food passes from the mouth to the stomach","v":["Esophagus"],"b":"Science Y6","a":"oesophagus","f":"part-1"},{"w":"Anther","p":"n","d":"the part of a flower at the top of a stamen that produces pollen","v":[],"b":"Science Y6","a":"anther","f":"part-1"},{"w":"Oscilloscope","p":"n","d":"a piece of equipment that shows changes in electrical current as waves in a line on a screen","v":[],"b":"Science Y6","a":"oscilloscope","f":"part-1"},{"w":"Amplitude","p":"n","d":"the greatest distance that a wave, especially a sound or radio wave, vibrates (= moves up and down)","v":[],"b":"Science Y6","a":"amplitude","f":"part-1"},{"w":"Precipitation","p":"n","d":"rain, snow, etc. that falls; the amount of this that falls","v":[],"b":"Science Y6","a":"precipitation","f":"part-1"},{"w":"Camouflage","p":"n","d":"the way in which an animal's colour or shape matches its surroundings and makes it difficult to see","v":[],"b":"Science Y6","a":"camouflage","f":"part-1"},{"w":"Malleable","p":"adj","d":"(of metal, etc.) that can be hit or pressed into different shapes easily without breaking or cracking","v":[],"b":"Science Y6","a":"malleable","f":"part-1"},{"w":"Fulcrum","p":"n","d":"(physics) the point on which a lever turns or is supported","v":[],"b":"Science Y6","a":"fulcrum","f":"part-1"},{"w":"Bioluminescence","p":"n","d":"the natural production of light by living creatures such as glow-worms","v":[],"b":"Science Y6","a":"bioluminescence","f":"part-1"},{"w":"Chloroplast","p":"n","d":"the structure in plant cells that contains chlorophyll and in which photosynthesis takes place","v":[],"b":"Science Y6","a":"chloroplast","f":"part-1"},{"w":"Chromosome","p":"n","d":"one of the very small structures like thin strings in the nuclei (= central parts) of animal and plant cells. Chromosomes carry the genes.","v":[],"b":"Science Y6","a":"chromosome","f":"part-1"},{"w":"Phagocytosis","p":"n","d":"the engulfing and usually the destruction of particulate matter by phagocytes that serves as an important bodily defense mechanism against infection by microorganisms","v":[],"b":"Science Y6","a":"phagocytosis","f":"part-1"},{"w":"Mesozoic","p":"adj","d":"of, relating to, or being an era of geologic history comprising the interval between the Permian and the Tertiary or the corresponding system of rocks that was marked by the presence of dinosaurs, marine and flying reptiles, ammonites, ferns, and gymnosperms and the appearance of angiosperms, mammals, and birds","v":[],"b":"Science Y6","a":"mesozoic","f":"part-1"},{"w":"Endothermic","p":"adj","d":"(of a chemical reaction) needing heat in order to take place","v":[],"b":"Science Y6","a":"endothermic","f":"part-1"},{"w":"Mitochondria","p":"n","d":"(plural of mitochondrion) a small part found in most cells, in which the energy in food is released","v":[],"b":"Science Y6","a":"mitochondria","f":"part-1"},{"w":"Enzymes","p":"n","d":"(plural of enzyme) a substance, produced by all living things, which helps a chemical change happen or happen more quickly, without being changed itself","v":[],"b":"Science Y6","a":"enzymes","f":"part-1"},{"w":"Sphincter","p":"n","d":"a ring of muscle that surrounds an opening in the body and can become tight to close it","v":[],"b":"Science Y6","a":"sphincter","f":"part-1"},{"w":"Vertebrates","p":"n","d":"(plural of vertebrate) any animal with a backbone, including all mammals, birds, fish, reptiles and amphibians","v":[],"b":"Science Y6","a":"vertebrates","f":"part-1"},{"w":"Pathophysiology","p":"n","d":"the physiology of abnormal states; specifically: the functional changes that accompany a particular syndrome or disease","v":[],"b":"Science Y6","a":"pathophysiology","f":"part-1"},{"w":"Invertebrate","p":"n","d":"any animal with no backbone, for example a worm","v":[],"b":"Science Y6","a":"invertebrate","f":"part-1"},{"w":"Aqueous","p":"adj","d":"containing water; like water","v":[],"b":"Science Y6","a":"aqueous","f":"part-1"},{"w":"Opaque","p":"adj","d":"(of glass, liquid, etc.) not clear enough to see through or allow light through","v":[],"b":"Science Y6","a":"opaque","f":"part-1"},{"w":"Luminous","p":"adj","d":"emitting or reflecting usually steady, suffused, or glowing light","v":[],"b":"Science Y6","a":"luminous","f":"part-1"},{"w":"Asteroid","p":"n","d":"any one of the many small planets that go around the sun","v":[],"b":"Science Y6","a":"asteroid","f":"part-1"},{"w":"Respiratory","p":"adj","d":"connected with breathing","v":[],"b":"Science Y6","a":"respiratory","f":"part-1"},{"w":"Oxidation","p":"n","d":"the process of oxidizing (= removing one or more electrons from a substance, or combining or making something combine with oxygen, especially when this causes metal to become covered with rust) or being oxidized","v":[],"b":"Science Y6","a":"oxidation","f":"part-1"},{"w":"Viscosity","p":"n","d":"the quality in a liquid of being thick and sticky; the quality of not flowing freely","v":[],"b":"Science Y6","a":"viscosity","f":"part-1"},{"w":"Sedimentary","p":"adj","d":"connected with or formed from the sand, stones, mud, etc. that settle at the bottom of lakes, etc.","v":[],"b":"Science Y6","a":"sedimentary","f":"part-1"},{"w":"Musculoskeletal","p":"adj","d":"of, relating to, or involving both musculature and skeleton","v":[],"b":"Science Y6","a":"musculoskeletal","f":"part-1"},{"w":"Prism","p":"n","d":"a clear glass or plastic object, often with ends in the shape of a triangle, which separates light that passes through it into the colours of the rainbow","v":[],"b":"Science Y6","a":"prism","f":"part-1"},{"w":"Repulsion","p":"n","d":"(physics) the force by which objects tend to push each other away","v":[],"b":"Science Y6","a":"repulsion","f":"part-1"},{"w":"Menstruation","p":"n","d":"the process or time of menstruating (= when a woman menstruates, there is a flow of blood from her womb, usually once a month)","v":[],"b":"Science Y6","a":"menstruation","f":"part-1"},{"w":"Combustion","p":"n","d":"the process of burning; a chemical process in which substances combine with the oxygen in the air to produce heat and light","v":[],"b":"Science Y6","a":"combustion","f":"part-1"},{"w":"Neutralisation","p":"n","d":"(chemistry) the act of making a substance neutral","v":["Neutralization"],"b":"Science Y6","a":"neutralisation","f":"part-1"},{"w":"Irreversible","p":"adj","d":"that cannot be changed back to what it was before","v":[],"b":"Science Y6","a":"irreversible","f":"part-1"},{"w":"Frictional","p":"adj","d":"of or relating to friction; moved or produced by friction","v":[],"b":"Science Y6","a":"frictional","f":"part-1"},{"w":"Transpiration","p":"n","d":"the process of water passing out from the surface of a plant or leaf","v":[],"b":"Science Y6","a":"transpiration","f":"part-1"},{"w":"Condensation","p":"n","d":"drops of water that form on a cold surface when warm water vapour becomes cool; the process of a gas changing to a liquid","v":[],"b":"Science Y6","a":"condensation","f":"part-1"},{"w":"Germination","p":"n","d":"the process by which a seed starts to grow","v":[],"b":"Science Y6","a":"germination","f":"part-1"},{"w":"Insoluble","p":"adj","d":"(of a substance) that does not dissolve in a liquid; (of a problem, mystery, etc.) that cannot be solved or explained","v":[],"b":"Science Y6","a":"insoluble","f":"part-1"},{"w":"Pervious","p":"adj","d":"permeable (= allowing a liquid or gas to pass through)","v":[],"b":"Science Y6","a":"pervious","f":"part-1"},{"w":"Constellation","p":"n","d":"a group of stars that forms a shape in the sky and has a name","v":[],"b":"Science Y6","a":"constellation","f":"part-1"},{"w":"Filtration","p":"n","d":"the process of filtering a liquid or gas","v":[],"b":"Science Y6","a":"filtration","f":"part-1"},{"w":"Insulator","p":"n","d":"a material or device used to prevent heat, electricity, or sound from escaping from something","v":[],"b":"Science Y6","a":"insulator","f":"part-1"},{"w":"Pollination","p":"n","d":"the process of pollen entering or being put into a flower or plant so that it produces seeds","v":[],"b":"Science Y6","a":"pollination","f":"part-1"},{"w":"Incisors","p":"n","d":"(plural of incisor) one of the sharp teeth at the front of the mouth that are used for biting","v":[],"b":"Science Y6","a":"incisors","f":"part-1"},{"w":"Molars","p":"n","d":"(plural of molar) any of the large, flat teeth at the back of the mouth used for crushing and chewing food","v":[],"b":"Science Y6","a":"molars","f":"part-1"},{"w":"Tectonic","p":"adj","d":"relating to the structure of the earth's surface","v":[],"b":"Science Y6","a":"tectonic","f":"part-1"},{"w":"Anemometer","p":"n","d":"an instrument for measuring the speed of the wind or of a current of gas","v":[],"b":"Science Y6","a":"anemometer","f":"part-1"},{"w":"Electromagnet","p":"n","d":"a piece of metal that becomes magnetic when electricity is passed through it","v":[],"b":"Science Y6","a":"electromagnet","f":"part-1"},{"w":"Peristalsis","p":"n","d":"the wave-like movements of the intestine, etc. caused when the muscles pull tight and relax","v":[],"b":"Science Y6","a":"peristalsis","f":"part-1"},{"w":"Absorbent","p":"adj","d":"able to take in something easily, especially liquid","v":[],"b":"Science Y6","a":"absorbent","f":"part-1"},{"w":"Deciduous","p":"adj","d":"(of a tree, bush etc.) that loses its leaves every year","v":[],"b":"Science Y6","a":"deciduous","f":"part-1"},{"w":"Germinate","p":"v","d":"when the seed of a plant germinates or is germinated, it starts to grow","v":[],"b":"Science Y6","a":"germinate","f":"part-1"},{"w":"Pliable","p":"adj","d":"easy to bend without breaking","v":[],"b":"Science Y6","a":"pliable","f":"part-1"},{"w":"Microorganism","p":"n","d":"a very small living thing that you can only see under a microscope","v":[],"b":"Science Y6","a":"microorganism","f":"part-1"},{"w":"Decomposer","p":"n","d":"any of various organisms (such as many bacteria and fungi) that return constituents of organic substances to ecological cycles by feeding on and breaking down dead protoplasm","v":[],"b":"Science Y6","a":"decomposer","f":"part-1"},{"w":"Gravitational","p":"adj","d":"connected with or caused by the force of gravity","v":[],"b":"Science Y6","a":"gravitational","f":"part-1"},{"w":"Saturated","p":"adj","d":"completely wet; if a chemical solution is saturated, it contains the greatest possible amount of the substance that has been dissolved in it","v":[],"b":"Science Y6","a":"saturated","f":"part-1"},{"w":"Crustacean","p":"n","d":"any creature with a soft body that is divided into sections, and a hard outer shell. Most crustaceans live in water.","v":[],"b":"Science Y6","a":"crustacean","f":"part-1"},{"w":"Amphibian","p":"n","d":"any animal that can live both on land and in water. Amphibians have cold blood and skin without scales. Frogs, toads and newts are all amphibians.","v":[],"b":"Science Y6","a":"amphibian","f":"part-1"},{"w":"Excretion","p":"n","d":"the act of passing solid or liquid waste matter from the body; the solid or liquid waste matter that is passed in this way","v":[],"b":"Science Y6","a":"excretion","f":"part-1"},{"w":"Cartilage","p":"n","d":"the strong white tissue that is important in supporting and connecting parts of the body, and especially in joints to prevent the bones rubbing against each other","v":[],"b":"Science Y6","a":"cartilage","f":"part-1"},{"w":"Biodiversity","p":"n","d":"the existence of a large number of different kinds of animals and plants which make a balanced environment","v":[],"b":"Science Y6","a":"biodiversity","f":"part-1"},{"w":"Kinetic","p":"adj","d":"of or produced by movement","v":[],"b":"Science Y6","a":"kinetic","f":"part-1"},{"w":"Cardiovascular","p":"adj","d":"relating to the heart and the blood vessels (= the tubes that carry blood around the body)","v":[],"b":"Science Y6","a":"cardiovascular","f":"part-1"},{"w":"Mollusc","p":"n","d":"any creature with a soft body that is not divided into different sections, and usually a hard outer shell. Snails and slugs are molluscs.","v":["Mollusk"],"b":"Science Y6","a":"mollusc","f":"part-1"},{"w":"Exoskeleton","p":"n","d":"(biology) a hard outer layer that protects the bodies of certain animals, such as insects","v":[],"b":"Science Y6","a":"exoskeleton","f":"part-1"},{"w":"Distillation","p":"n","d":"the process of distilling a liquid (= making a liquid pure by heating it until it becomes a gas, then cooling it and collecting the drops of liquid that form)","v":[],"b":"Science Y6","a":"distillation","f":"part-1"}];
+const POS = {"n":"noun","v":"verb","adj":"adjective","adv":"adverb","prep":"preposition","pron":"pronoun","conj":"conjunction","det":"determiner","exclam":"exclamation","phr v":"phrasal verb","pl n":"plural noun","number":"number","phrase":"phrase","idiom":"idiom"};
+const ICON={
+  play:'<svg class="i" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  slow:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>',
+  eye:'<svg class="i" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  lock:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  shuffle:'<svg class="i" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></svg>'
+};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem("gmis-champ-junior-sb:"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("gmis-champ-junior-sb:"+k,JSON.stringify(v))}catch(e){}}};
+const voiceErr=document.getElementById("voiceErr");
+function showErr(msg){voiceErr.textContent=msg;voiceErr.hidden=!msg}
+
+/* ---------- recorded audio (bundled in audio/*.js so it works offline and on GitHub Pages) ---------- */
+window.SB_AUDIO=window.SB_AUDIO||{};
+const loading={};
+function loadBundle(n){
+  if(loading[n])return loading[n];
+  loading[n]=new Promise((res,rej)=>{
+    const paths=["audio/"+n+".js",n+".js"];let i=0;
+    const tryNext=()=>{
+      if(i>=paths.length){delete loading[n];rej();return}
+      const sc=document.createElement("script");sc.src=paths[i++];sc.onload=res;sc.onerror=tryNext;document.head.appendChild(sc);
+    };
+    tryNext();
+  });
+  return loading[n];
+}
+const player=new Audio();player.preload="auto";
+let playingBtn=null;
+function mark(btn){if(playingBtn)playingBtn.classList.remove("playing");playingBtn=btn||null;if(btn)btn.classList.add("playing")}
+player.addEventListener("ended",()=>mark(null));
+async function playRec(w,slow,btn){
+  try{player.pause()}catch(e){}
+  if(canSpeak)try{speechSynthesis.cancel()}catch(e){}
+  const key=w.a+(slow?"-slow":"");
+  try{ if(!SB_AUDIO[key])await loadBundle(w.f); }catch(e){}
+  if(!SB_AUDIO[key]){showErr("The recording could not load. Keep the “audio” folder next to index.html.");return}
+  player.src=SB_AUDIO[key];player.currentTime=0;mark(btn);showErr("");
+  const p=player.play();
+  if(p&&p.catch)p.catch(()=>{mark(null);showErr("The recording could not play. Check that the sound is on.")});
+}
+window.addEventListener("load",()=>{ /* load all recordings in the background */
+  const files=[...new Set(WORDS.map(w=>w.f))];let i=0;
+  const next=()=>{if(i<files.length)loadBundle(files[i++]).then(next,next)};setTimeout(next,300);
+});
+
+/* ---------- online browser voices ---------- */
+const canSpeak="speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+let voices=[],voiceName=store.get("voice","");
+const voiceSel=document.getElementById("voiceSel"),rateEl=document.getElementById("rate");
+rateEl.value=store.get("rate",0.85);
+function showRate(){document.getElementById("rateVal").textContent="("+Number(rateEl.value).toFixed(2)+"×)"}
+rateEl.addEventListener("input",()=>{store.set("rate",Number(rateEl.value));showRate()});showRate();
+function isSonia(v){return /sonia/i.test(v.name)&&/natural|online/i.test(v.name)}
+function rankVoice(v){let s=0;if(isSonia(v))s+=100;if(/natural|neural|online/i.test(v.name))s+=35;if(/google/i.test(v.name))s+=30;return s}
+function loadVoices(){
+  if(!canSpeak){voiceSel.innerHTML="<option>Not available in this browser</option>";voiceSel.disabled=true;return}
+  voices=speechSynthesis.getVoices().filter(v=>/^en[-_]gb$/i.test(v.lang)).sort((a,b)=>rankVoice(b)-rankVoice(a));
+  if(!voices.length){voiceSel.innerHTML='<option>No British English voice found</option>';document.getElementById("noSonia").hidden=false;return}
+  const sonia=voices.find(isSonia);
+  document.getElementById("noSonia").hidden=!!sonia;
+  voiceName=sonia?sonia.name:(voices.some(v=>v.name===voiceName)?voiceName:voices[0].name);
+  voiceSel.innerHTML=voices.map(v=>`<option value="${esc(v.name)}"${v.name===voiceName?" selected":""}>${esc(v.name)}${v.localService===false?" – online":""}</option>`).join("");
+}
+if(canSpeak){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;setTimeout(loadVoices,700)}else loadVoices();
+voiceSel.addEventListener("change",()=>{voiceName=voiceSel.value;store.set("voice",voiceName)});
+function speakTTS(text,mult,btn){
+  if(!canSpeak){showErr("This browser cannot use online voices. Choose Recorded.");return}
+  try{player.pause()}catch(e){}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=voices.find(x=>x.name===voiceName);
+  if(v){u.voice=v;u.lang=v.lang}else u.lang="en-GB";
+  u.rate=Math.max(0.3,Number(rateEl.value)*mult);
+  let started=false;
+  u.onstart=()=>{started=true;showErr("");mark(btn)};
+  u.onend=()=>mark(null);
+  u.onerror=ev=>{mark(null);if(ev.error==="interrupted"||ev.error==="canceled")return;showErr("The online voice did not work (it needs internet). Choose another voice, or switch to Recorded.")};
+  setTimeout(()=>speechSynthesis.speak(u),60);
+  setTimeout(()=>{if(!started&&!speechSynthesis.speaking)showErr("The online voice did not start (it needs internet). Choose another voice, or switch to Recorded.")},3500);
+}
+
+/* ---------- voice mode ---------- */
+let mode=store.get("mode","rec");
+const modeEl=document.getElementById("voiceMode");
+function renderMode(){
+  modeEl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===mode));
+  document.getElementById("ttsBox").hidden=mode!=="tts";
+  document.getElementById("recHint").hidden=mode!=="rec";
+  showErr("");
+}
+modeEl.onclick=e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.m;store.set("mode",mode);renderMode()};
+renderMode();
+function say(w,slow,btn){
+  if(mode==="rec")playRec(w,slow,btn);
+  else speakTTS(w.w,slow?0.65:1,btn);
+}
+document.getElementById("testVoice").onclick=e=>{
+  const w=WORDS[0];
+  say(w,false,e.currentTarget);
+};
+
+/* ---------- draw ---------- */
+WORDS.forEach((w,i)=>w.id=i);
+const book="All";
+let used=store.get("used",[]),current=store.get("current",null),revealed=store.get("revealed",[]);
+if(current!=null&&!WORDS[current])current=null;
+const hideEl=document.getElementById("hideSpell"),hideDefEl=document.getElementById("hideDef");
+hideEl.checked=store.get("hide",true);hideDefEl.checked=store.get("hideDef",false);
+hideEl.onchange=()=>{store.set("hide",hideEl.checked);renderStage()};
+hideDefEl.onchange=()=>{store.set("hideDef",hideDefEl.checked);renderStage()};
+const stage=document.getElementById("stage");
+let spinning=false;
+function pool(){return WORDS.filter(w=>book==="All"||w.b===book)}
+function remaining(){const u=new Set(used);return pool().filter(w=>!u.has(w.id))}
+function save(){store.set("used",used);store.set("current",current);store.set("revealed",revealed)}
+function renderCount(){const p=pool().length,r=remaining().length;document.getElementById("leftCount").innerHTML=`<b>${r}</b> of ${p} words left to draw`}
+function renderStage(){
+  if(spinning)return;
+  const w=current==null?null:WORDS[current];
+  if(!w){
+    const r=remaining().length;
+    stage.innerHTML=`<div class="idle">
+      <h2>${r?"Draw a word for the next speller":"All the words have been drawn"}</h2>
+      <p>${r?"The computer picks a word at random. Each word can be drawn only once. Press Pronounce when you are ready to say the word, read the part of speech and definition to students, then reveal the spelling after they answer.":"Every word in this selection has been drawn. Use Start fresh for a new contest."}</p>
+      ${r?`<button class="btn btn-honey btn-draw" id="drawBtn">${ICON.shuffle} Draw a random word <span class="kbd">D</span></button>`:""}
+    </div>`;
+    const d=document.getElementById("drawBtn");if(d)d.onclick=draw;
+    return;
+  }
+  const show=!hideEl.checked||revealed.includes(w.id);
+  const showDef=!hideDefEl.checked||revealed.includes(w.id);
+  stage.innerHTML=`
+    <div class="say">
+      <button class="btn btn-purple btn-say" id="sayBtn">${ICON.play} Pronounce <span class="kbd">P</span></button>
+      <button class="btn btn-ghost btn-say" id="slowBtn">${ICON.slow} Say slowly <span class="kbd">S</span></button>
+    </div>
+    <div>${showDef?`<div class="label">Part of speech and definition</div><p class="defn"><span class="chip pos">${esc(POS[w.p]||w.p)}</span>${esc(w.d)}</p>`:`<p class="hint" style="margin:0">Definition hidden. It will show when you reveal the spelling.</p>`}</div>
+    <div class="spell ${show?"shown":""}">
+      ${show?`<div><div class="label">Correct spelling</div><p class="bigword">${esc(w.w)}</p>
+        ${w.v.length?`<div class="variants">Also accepted: <b>${w.v.map(esc).join(", ")}</b></div>`:""}</div>`
+      :`<div class="hiddenmsg">${ICON.lock} Spelling is hidden from students</div>
+        <button class="btn btn-ghost" id="revealBtn">${ICON.eye} Reveal spelling <span class="kbd">R</span></button>`}
+    </div>
+    <div class="stage-foot">
+      <button class="btn btn-honey" id="nextBtn" ${remaining().length?"":"disabled"}>${ICON.shuffle} Draw next word <span class="kbd">D</span></button>
+    </div>`;
+  document.getElementById("sayBtn").onclick=e=>say(w,false,e.currentTarget);
+  document.getElementById("slowBtn").onclick=e=>say(w,true,e.currentTarget);
+  const rb=document.getElementById("revealBtn");if(rb)rb.onclick=reveal;
+  document.getElementById("nextBtn").onclick=draw;
+}
+function reveal(){if(current==null)return;if(!revealed.includes(current))revealed.push(current);save();renderStage()}
+function draw(){
+  if(spinning)return;
+  try{player.pause()}catch(e){} if(canSpeak)try{speechSynthesis.cancel()}catch(e){}
+  const r=remaining();if(!r.length){current=null;save();renderStage();return}
+  const pick=r[Math.floor(Math.random()*r.length)];
+  const finish=()=>{spinning=false;current=pick.id;used.push(pick.id);save();renderStage();renderCount();
+    const s=document.getElementById("sayBtn");if(s)s.focus()};   /* no automatic pronunciation */
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){finish();return}
+  spinning=true;
+  stage.innerHTML=`<div class="idle"><div class="chip">Drawing…</div><div class="spin" id="spin"></div><p>Choosing a word at random</p></div>`;
+  const sp=document.getElementById("spin");let t=0;
+  const iv=setInterval(()=>{sp.textContent="Word "+(1+Math.floor(Math.random()*pool().length));if(++t>14){clearInterval(iv);finish()}},60);
+}
+const freshBtn=document.getElementById("freshBtn"),freshBox=document.getElementById("freshConfirm"),freshDone=document.getElementById("freshDone");
+freshBtn.onclick=()=>{freshBox.hidden=false;freshBtn.hidden=true;freshDone.hidden=true};
+document.getElementById("freshNo").onclick=()=>{freshBox.hidden=true;freshBtn.hidden=false};
+document.getElementById("freshYes").onclick=()=>{used=[];revealed=[];current=null;save();renderStage();renderCount();freshBox.hidden=true;freshBtn.hidden=false;freshDone.hidden=false};
+document.addEventListener("keydown",e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.target.matches("input,select,textarea"))return;
+  const k=e.key.toLowerCase();
+  if(k==="d"){e.preventDefault();draw()}
+  else if(current!=null&&k==="p")say(WORDS[current],false,document.getElementById("sayBtn"));
+  else if(current!=null&&k==="s")say(WORDS[current],true,document.getElementById("slowBtn"));
+  else if(current!=null&&k==="r")reveal();
+});
+renderCount();renderStage();
+</script>
+</body>
+</html>
